@@ -10,14 +10,13 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
-@Profile("dev")
-public class SpringSecurity extends WebSecurityConfigurerAdapter {
+@Profile("prod")
+public class SpringSecurityProd extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailsServiceImpl userDetailsServiceImpl;
@@ -34,7 +33,7 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/public/**").permitAll()
                 .antMatchers("/journal/**", "/user/**").authenticated()
                 .antMatchers("/admin/**").hasRole("ADMIN")
-                .anyRequest().permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .httpBasic()
                 .and()
