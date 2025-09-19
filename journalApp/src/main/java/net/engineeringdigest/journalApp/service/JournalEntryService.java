@@ -39,7 +39,7 @@ public class JournalEntryService {
         }
         catch(Exception e){
 
-                logger.info("why this error came !?");
+                logger.error("why this error came !?");
 //            System.out.println(e.getMessage());
             throw new RuntimeException("An error occurred : " + e);
         }
