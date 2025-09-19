@@ -4,6 +4,8 @@ import net.engineeringdigest.journalApp.entity.JournalEntry;
 import net.engineeringdigest.journalApp.entity.User;
 import net.engineeringdigest.journalApp.repository.JournalEntryRepository;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,10 @@ public class JournalEntryService {
     @Autowired
     public UserService userService;
 
+
+    private static final Logger logger = LoggerFactory.getLogger(JournalEntryService.class);
+
+
     @Transactional
     public void saveEntry(JournalEntry journalEntry, String userName ){
         try{
@@ -32,7 +38,9 @@ public class JournalEntryService {
             userService.saveEntry(user);
         }
         catch(Exception e){
-            System.out.println(e.getMessage());
+
+                logger.info("why this error came !?");
+//            System.out.println(e.getMessage());
             throw new RuntimeException("An error occurred : " + e);
         }
     }
