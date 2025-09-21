@@ -3,6 +3,7 @@ package net.engineeringdigest.journalApp.controller;
 import net.engineeringdigest.journalApp.entity.JournalEntry;
 import net.engineeringdigest.journalApp.entity.User;
 import net.engineeringdigest.journalApp.service.JournalEntryService;
+import net.engineeringdigest.journalApp.service.QuotesService;
 import net.engineeringdigest.journalApp.service.UserService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class UserController {
 
     @Autowired
     public UserService userService;
+
+    @Autowired
+    public QuotesService quotesService;
 
 
     @PutMapping
@@ -47,5 +51,18 @@ public class UserController {
 
         userService.deleteByUserName(userName);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping
+    public ResponseEntity<?> greeting(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        String quote = quotesService.getQuote();
+        if(quote.isEmpty()){
+            return new ResponseEntity<>("Hi " + authentication.getName(), HttpStatus.OK);
+        }
+
+        String msg = "Hi " + authentication.getName() + "\nQuote of the day " + quote;
+        return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 }
