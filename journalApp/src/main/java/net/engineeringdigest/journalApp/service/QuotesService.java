@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDate;
 import java.util.Map;
 import java.util.Objects;
 
@@ -23,7 +24,17 @@ public class QuotesService {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Autowired
+    private RedisService redisService;
+
+
     public String getQuote(){
+
+        QuoteResponse cachedQoteResponse = redisService.get("quote_for_" + LocalDate.now(), QuoteResponse.class);
+        if(cachedQoteResponse != null){
+            return cachedQoteResponse.getQuote() + " ... by " + cachedQoteResponse.getAuthor();
+        }
+
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-Api-Key", apikey);
 
@@ -41,6 +52,7 @@ public class QuotesService {
             return "";
         }
 
+        redisService.set("quote_for_" + LocalDate.now(), quoteResponse[0], 24);
         String quote = quoteResponse[0].getQuote();
         String author = quoteResponse[0].getAuthor();
 

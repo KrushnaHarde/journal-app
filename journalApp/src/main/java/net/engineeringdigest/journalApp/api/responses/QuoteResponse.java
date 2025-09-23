@@ -14,4 +14,9 @@ public class QuoteResponse {
     private String quote;
     private String author;
     private String category;
+
+    @Override
+    public String toString(){
+        return this.getQuote() + " ...by " + this.getAuthor();
+    }
 }
